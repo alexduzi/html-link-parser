@@ -1,12 +1,18 @@
 package main
 
 import (
-	"fmt"
+	"flag"
 	"htmllinkparser/linkparser"
+	"log"
 )
 
 func main() {
-	fmt.Println("Start...")
+	log.Println("Start...")
 
-	linkparser.Parse()
+	fileHtml := flag.String("file", "", "Html file path")
+	flag.Parse()
+
+	log.Printf("File: %s \n", *fileHtml)
+
+	linkparser.Parse(fileHtml)
 }
