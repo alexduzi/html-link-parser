@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"htmllinkparser/linkparser"
 	"log"
 )
@@ -14,5 +15,9 @@ func main() {
 
 	log.Printf("File: %s \n", *fileHtml)
 
-	linkparser.Parse(fileHtml)
+	links := linkparser.Parse(fileHtml)
+
+	for _, link := range links {
+		fmt.Printf("%+v\n", link)
+	}
 }

@@ -124,14 +124,10 @@ func getLinks(doc *xhtml.Node) []LinkElement {
 	return links
 }
 
-func Parse(fileHtml *string) {
+func Parse(fileHtml *string) []LinkElement {
 	doc, _ := openFileAndParseDoc(fileHtml)
 
 	log.Println("Init parsing...")
 
-	links := getLinks(doc)
-
-	for _, link := range links {
-		fmt.Printf("%+v\n", link)
-	}
+	return getLinks(doc)
 }
