@@ -26,19 +26,19 @@ func openFileAndParseDoc(fileHtml *string) (*xhtml.Node, error) {
 	return doc, err
 }
 
-func IsAnchorTag(n *xhtml.Node) bool {
+func isAnchorTag(n *xhtml.Node) bool {
 	return n.Type == xhtml.ElementNode && n.Data == "a"
 }
 
-func IsElementNode(n *xhtml.Node) bool {
+func isElementNode(n *xhtml.Node) bool {
 	return n.Type == xhtml.ElementNode && (n.Data == "strong" || n.Data == "div" || n.Data == "span")
 }
 
-func IsTextTag(n *xhtml.Node) bool {
+func isTextTag(n *xhtml.Node) bool {
 	return n.Type == xhtml.TextNode
 }
 
-func SanitizeText(data string) string {
+func sanitizeText(data string) string {
 	content := strings.TrimSpace(strings.Replace(data, "\n", "", -1))
 	if content == "" {
 		return ""
@@ -63,9 +63,9 @@ func getText(n *xhtml.Node, key string, isNearElement bool) string {
 
 	var text strings.Builder
 
-	text.WriteString(SanitizeText(n.Data))
+	text.WriteString(sanitizeText(n.Data))
 
-	if n.NextSibling != nil && IsElementNode(n.NextSibling) && n.NextSibling.LastChild != nil {
+	if n.NextSibling != nil && isElementNode(n.NextSibling) && n.NextSibling.LastChild != nil {
 		if !isNearElement {
 			text.WriteString(" ")
 		}
@@ -78,7 +78,7 @@ func getText(n *xhtml.Node, key string, isNearElement bool) string {
 func setHrefKeys(doc *xhtml.Node) map[string]string {
 	mapLinks := make(map[string]string, 0)
 	for n := range doc.Descendants() {
-		if IsAnchorTag(n) {
+		if isAnchorTag(n) {
 			href := getAttr(n, "href")
 			mapLinks[href] = ""
 		}
@@ -89,7 +89,7 @@ func setHrefKeys(doc *xhtml.Node) map[string]string {
 func setContent(doc *xhtml.Node, m map[string]string) {
 	for n := range doc.Descendants() {
 		for key, _ := range m {
-			if IsTextTag(n) {
+			if isTextTag(n) {
 				text := getText(n, key, false)
 				if value, ok := m[key]; ok && text != "" {
 					newValue := value + text
