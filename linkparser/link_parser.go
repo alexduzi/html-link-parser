@@ -14,16 +14,19 @@ type LinkElement struct {
 	Content string
 }
 
-func openFileAndParseDoc(fileHtml *string) (*xhtml.Node, error) {
-	file, err := os.Open(*fileHtml)
+func openFileAndParseDoc(fileHtml string) *xhtml.Node {
+	file, err := os.Open(fileHtml)
 	if err != nil {
-		panic(fmt.Sprintf("file %s does not exists", *fileHtml))
+		panic(fmt.Sprintf("file %s does not exists", fileHtml))
 	}
 	defer file.Close()
 
 	doc, err := xhtml.Parse(file)
+	if err != nil {
+		panic(err)
+	}
 
-	return doc, err
+	return doc
 }
 
 func isAnchorTag(n *xhtml.Node) bool {
@@ -124,8 +127,8 @@ func getLinks(doc *xhtml.Node) []LinkElement {
 	return links
 }
 
-func Parse(fileHtml *string) []LinkElement {
-	doc, _ := openFileAndParseDoc(fileHtml)
+func Parse(fileHtml string) []LinkElement {
+	doc := openFileAndParseDoc(fileHtml)
 
 	log.Println("Init parsing...")
 
