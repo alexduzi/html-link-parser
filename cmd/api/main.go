@@ -20,9 +20,11 @@ func main() {
 		panic(fmt.Errorf("could not read page %v", errRead))
 	}
 
-	for _, link := range links {
-		fmt.Printf("%s -> %s \n", link.Href, link.Content)
-	}
+	// for _, link := range links {
+	// 	fmt.Printf("%s -> %s \n", link.Href, link.Content)
+	// }
+
+	linkparser.ParseToSiteMap(links)
 
 	// fmt.Println(string(content))
 }
